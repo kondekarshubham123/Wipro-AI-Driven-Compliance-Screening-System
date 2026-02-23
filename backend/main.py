@@ -4,6 +4,8 @@ from typing import List
 import uuid
 from datetime import datetime
 
+from agents.compliance_agent import compliance_agent
+
 app = FastAPI(title="Wipro AI Compliance Screening System")
 
 @app.get("/")
@@ -12,14 +14,22 @@ async def root():
 
 @app.post("/screen-order", response_model=ScreeningResponse)
 async def screen_order(order: OrderRequest):
-    # This will be integrated with the Compliance Agent later
-    # For now, return a pending response
+    # Invoke the agentic workflow
+    initial_state = {
+        "order": order,
+        "results": [],
+        "overall_status": ComplianceStatus.PENDING,
+        "summary": ""
+    }
+    
+    final_output = await compliance_agent.ainvoke(initial_state)
+    
     report_id = str(uuid.uuid4())
     
     return ScreeningResponse(
         order_id=order.order_id,
-        overall_status=ComplianceStatus.PENDING,
-        checks=[],
+        overall_status=final_output["overall_status"],
+        checks=final_output["results"],
         report_id=report_id,
         timestamp=datetime.utcnow()
     )
