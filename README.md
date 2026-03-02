@@ -61,6 +61,13 @@ graph TD
    - **Database:** `localhost:5433`
    - **Redis:** `localhost:6380`
 
+## API Documentation
+FastAPI provides interactive API documentation out of the box. Once the system is running, you can access:
+- **Swagger UI:** [http://localhost:8080/docs](http://localhost:8080/docs)
+- **ReDoc:** [http://localhost:8080/redoc](http://localhost:8080/redoc)
+
+These interfaces allow you to explore all endpoints, view detailed request/response schemas, and even execute screenings directly from your browser.
+
 ## Usage Examples
 
 ### 1. Screen a Safe Order

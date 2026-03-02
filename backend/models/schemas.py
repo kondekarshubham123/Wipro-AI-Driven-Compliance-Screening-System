@@ -10,39 +10,39 @@ class ComplianceStatus(str, Enum):
     FLAGGED_FOR_REVIEW = "FLAGGED_FOR_REVIEW"
 
 class OrderItem(BaseModel):
-    name: str
-    category: str
-    quantity: int
-    price: float
+    name: str = Field(..., description="Name of the item")
+    category: str = Field(..., description="Category for compliance checking (e.g., Electronics, Military Hardware)")
+    quantity: int = Field(..., ge=1, description="Quantity of items")
+    price: float = Field(..., gt=0, description="Price per unit")
 
 class OrderShipment(BaseModel):
-    recipient_name: str
-    recipient_address: str
-    recipient_country: str
+    recipient_name: str = Field(..., description="Full name of the recipient")
+    recipient_address: str = Field(..., description="Shipping address")
+    recipient_country: str = Field(..., description="Destination country for sanction checks")
 
 class OrderRequest(BaseModel):
-    order_id: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
-    customer_id: str
-    items: List[OrderItem]
-    shipment: OrderShipment
+    order_id: str = Field(..., description="Unique order identifier")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Order placement timestamp")
+    customer_id: str = Field(..., description="Identifier for the customer")
+    items: List[OrderItem] = Field(..., description="List of items in the order")
+    shipment: OrderShipment = Field(..., description="Shipping information")
 
 class ComplianceCheckResult(BaseModel):
-    check_name: str
-    status: ComplianceStatus
-    details: str
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    check_name: str = Field(..., description="Name of the compliance check performed")
+    status: ComplianceStatus = Field(..., description="Result status of the specific check")
+    details: str = Field(..., description="Detailed findings or reasoning for the status")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Time the check was completed")
 
 class ScreeningResponse(BaseModel):
-    order_id: str
-    overall_status: ComplianceStatus
-    checks: List[ComplianceCheckResult]
-    report_id: Optional[str] = None
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    order_id: str = Field(..., description="Unique order identifier")
+    overall_status: ComplianceStatus = Field(..., description="Final compliance decision for the order")
+    checks: List[ComplianceCheckResult] = Field(..., description="Breakdown of individual compliance checks")
+    report_id: Optional[str] = Field(None, description="UUID for the generated audit report")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Time the screening was concluded")
 
 class AuditReport(BaseModel):
-    report_id: str
-    order_id: str
-    generated_at: datetime = Field(default_factory=datetime.utcnow)
-    content: str  # Markdown or HTML content
-    pdf_url: Optional[str] = None
+    report_id: str = Field(..., description="Unique identifier for the report")
+    order_id: str = Field(..., description="Related order identifier")
+    generated_at: datetime = Field(default_factory=datetime.utcnow, description="Time the report was generated")
+    content: str = Field(..., description="Content of the report in HTML/Markdown format")
+    pdf_url: Optional[str] = Field(None, description="Path or URL to the generated PDF")
