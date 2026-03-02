@@ -3,7 +3,7 @@ uvicorn[standard]
 pydantic
 pydantic-settings
 langgraph
-langchain-openai
+langchain-google-genai
 weasyprint
 sqlalchemy
 psycopg2-binary
@@ -12,3 +12,4 @@ pytest
 httpx
 python-dotenv
 Jinja2
+langchain

@@ -13,44 +13,37 @@ class AgentState(TypedDict):
 
 async def sanction_check_node(state: AgentState):
     order = state["order"]
-    is_sanctioned = await compliance_service.check_sanctions(order.shipment.recipient_name)
-    is_sanctioned_country = await compliance_service.check_country(order.shipment.recipient_country)
+    decision = await compliance_service.check_sanctions(
+        order.shipment.recipient_name, 
+        order.shipment.recipient_country
+    )
     
-    status = ComplianceStatus.PASSED
-    details = "No sanctions detected."
+    status = ComplianceStatus.VIOLATION_DETECTED if decision.is_violation else ComplianceStatus.PASSED
     
-    if is_sanctioned or is_sanctioned_country:
-        status = ComplianceStatus.VIOLATION_DETECTED
-        details = "Recipient or destination country is on a sanction list."
-        
     result = ComplianceCheckResult(
-        check_name="Sanction Check",
+        check_name="AI Sanction Check",
         status=status,
-        details=details,
+        details=decision.reason,
         timestamp=datetime.utcnow()
     )
     return {"results": [result]}
 
 async def legal_check_node(state: AgentState):
     order = state["order"]
-    has_restricted_items = False
-    details = "All items cleared legal check."
+    results = []
     
     for item in order.items:
-        if await compliance_service.check_item_restriction(item.category):
-            has_restricted_items = True
-            details = f"Restricted item category detected: {item.category}"
-            break
+        decision = await compliance_service.check_item_restriction(item.category, item.name)
+        status = ComplianceStatus.VIOLATION_DETECTED if decision.is_violation else ComplianceStatus.PASSED
+        
+        results.append(ComplianceCheckResult(
+            check_name=f"Legal Check: {item.name}",
+            status=status,
+            details=decision.reason,
+            timestamp=datetime.utcnow()
+        ))
             
-    status = ComplianceStatus.VIOLATION_DETECTED if has_restricted_items else ComplianceStatus.PASSED
-    
-    result = ComplianceCheckResult(
-        check_name="Legal & Regulatory Check",
-        status=status,
-        details=details,
-        timestamp=datetime.utcnow()
-    )
-    return {"results": [result]}
+    return {"results": results}
 
 async def finalize_node(state: AgentState):
     results = state["results"]
