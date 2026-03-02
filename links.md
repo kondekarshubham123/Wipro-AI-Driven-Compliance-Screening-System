@@ -1,7 +1,7 @@
 # Professional & Submission Links
 
 ### 🎥 Project Demo
-- **YouTube**: [Wipro AI Driven Compliance Screening System Challenge Demo](To be updated)
+- **YouTube**: [Wipro AI Driven Compliance Screening System Challenge Demo](https://youtu.be/zQNIVhVuSxc)
 
 ### 👨‍💻 Developer Profiles
 - **GitHub**: [kondekarshubham123](https://github.com/kondekarshubham123/Wipro-AI-Driven-Compliance-Screening-System.git)
