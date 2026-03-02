@@ -13,7 +13,7 @@ This project is an **Agentic AI application** developed for the Wipro AI Driven 
 ## Tech Stack
 - **Backend:** FastAPI (Python 3.11)
 - **Agentic Framework:** LangGraph / LangChain
-- **LLM:** OpenAI GPT-4o (Integration ready)
+- **LLM:** Google Gemini 2.0 Flash
 - **Database/Caching:** PostgreSQL & Redis
 - **Reporting:** WeasyPrint (HTML-to-PDF)
 - **Deployment:** Docker & Docker Compose
@@ -37,7 +37,7 @@ graph TD
 
 ### Prerequisites
 - Docker and Docker Compose installed on your system.
-- OpenAI API Key (Optional, for advanced LLM reasoning).
+- Google API Key (For dynamic AI-driven compliance reasoning).
 
 ### Installation & Running
 1. **Clone the repository:**
@@ -49,7 +49,7 @@ graph TD
 2. **Set Environment Variables:**
    Create a `.env` file in the root or set them in your environment:
    ```env
-   OPENAI_API_KEY=your_api_key_here
+   GOOGLE_API_KEY=your_api_key_here
    ```
 
 3. **Launch the System:**
