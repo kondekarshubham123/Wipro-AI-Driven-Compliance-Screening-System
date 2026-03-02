@@ -11,3 +11,4 @@ redis
 pytest
 httpx
 python-dotenv
+Jinja2

@@ -4,6 +4,7 @@ from typing import List
 import uuid
 from datetime import datetime
 
+from agents.compliance_agent import compliance_agent
 from utils.report_generator import report_generator
 
 app = FastAPI(title="Wipro AI Compliance Screening System")
